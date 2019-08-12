@@ -1,11 +1,11 @@
 const settings = {
     appStore: null,
-    playStore: null,
-    timeout: 1000,
-    isInit: false
+    googlePlay: null,
+    timeout: 1000
 };
 
 const envs = {
+    isInit: false,
     wording: {
         ios: 'IOS',
         android: 'ANDROID'
@@ -47,13 +47,13 @@ function setEnv() {
 }
 
 export const initDeeplink = (options = {}) => {
-    if (settings.isInit) {
+    if (envs.isInit) {
         return;
     }
 
-    settings.isInit = true;
+    envs.isInit = true;
     settings.appStore = options.appStore || null;
-    settings.playStore = options.playStore || null;
+    settings.googlePlay = options.googlePlay || null;
     settings.timeout = options.timeout || null;
 
     setEnv();
@@ -61,18 +61,18 @@ export const initDeeplink = (options = {}) => {
 };
 
 export const openDeeplink = (deeplink, customTimeout, needFallback, fallbackAction) => {
-    const timeout = customTimeout || settings.timeout   
+    const timeout = customTimeout || settings.timeout;
 
     if (needFallback) {
         envs.timer = setTimeout(function() {
             if (envs.device === envs.wording.ios && settings.appStore) {
                 wondow.location.href = settings.appStore;
-            } else if (envs.device === envs.wording.android && settings.playStore) {
-                wondow.location.href = settings.playStore;
+            } else if (envs.device === envs.wording.android && settings.googlePlay) {
+                wondow.location.href = settings.googlePlay;
             } else {
                 fallbackAction && fallbackAction();
             }
-        }, timeout)
+        }, timeout);
     }
 
     window.location.href = deeplink;
