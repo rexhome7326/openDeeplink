@@ -26,7 +26,7 @@ initDeeplink({
 ```
 #### openDeeplink
 ```js
-openDeeplink(String deeplink, Integer customTimeout, Boolean needFallback, Function fallbackAction)
+openDeeplink(String deeplink, Boolean needFallback, Integer customTimeout, Function fallbackAction)
 ```
 * `deeplink` *(String)*: require, deeplink for app you want to open
 * `customTimeout` *(Integer)*: optional, timeout for waiting app open

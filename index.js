@@ -60,10 +60,11 @@ export const initDeeplink = (options = {}) => {
     checkDeviceOs();
 };
 
-export const openDeeplink = (deeplink, customTimeout, needFallback, fallbackAction) => {
+export const openDeeplink = (deeplink, needFallback, customTimeout, fallbackAction) => {
     const timeout = customTimeout || settings.timeout;
 
     if (needFallback) {
+        clearTimeout(envs.timer);
         envs.timer = setTimeout(function() {
             if (envs.device === envs.wording.ios && settings.appStore) {
                 wondow.location.href = settings.appStore;
