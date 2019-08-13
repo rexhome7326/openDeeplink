@@ -1,7 +1,9 @@
+const DEFAULT_TIMEOUT = 1000;
+
 const settings = {
     appStore: null,
     googlePlay: null,
-    timeout: 1000
+    timeout: DEFAULT_TIMEOUT
 };
 
 const envs = {
@@ -60,8 +62,8 @@ export const initDeeplink = (options = {}) => {
     checkDeviceOs();
 };
 
-export const openDeeplink = (deeplink, needFallback, customTimeout, fallbackAction) => {
-    const timeout = customTimeout || settings.timeout;
+export const openDeeplink = (deeplink, needFallback = false, customTimeout, fallbackAction) => {
+    const timeout = customTimeout || settings.timeout || DEFAULT_TIMEOUT;
 
     if (needFallback) {
         clearTimeout(envs.timer);
