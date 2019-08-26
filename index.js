@@ -58,7 +58,7 @@ function setEnv() {
     document.addEventListener(envs.visibilityChange, handleVisibilityChange, false);
 }
 
-exports.initDeeplink = options => {
+exports.initDeeplink = function(options) {
     if (envs.isInit) {
         return;
     }
@@ -78,7 +78,7 @@ exports.initDeeplink = options => {
     }
 };
 
-exports.openDeeplink = (deeplink, customTimeout, fallbackAction) => {
+exports.openDeeplink = function(deeplink, customTimeout, fallbackAction) {
     if (envs.isSafari) {
         window.open(deeplink, 'deeplink');
         return;
