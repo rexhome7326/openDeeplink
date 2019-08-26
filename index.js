@@ -1,4 +1,4 @@
-const DEFAULT_TIMEOUT = 1000;
+const DEFAULT_TIMEOUT = 3000;
 
 const settings = {
     appStore: null,
@@ -16,7 +16,9 @@ const envs = {
     timer: null,
     device: null,
     hidden: null,
-    visibilityChange: null
+    visibilityChange: null,
+    isSafari: false,
+    isChrome: false
 }
 
 function handleVisibilityChange(e) {
@@ -27,10 +29,18 @@ function handleVisibilityChange(e) {
 
 function checkDeviceOs() {
     const ua = navigator.userAgent.toLowerCase()
-    const isIPhone = testRegex.test(ua)
+    const isIPhone = envs.testRegex.test(ua)
     const isAndroid = !!~ua.indexOf('android')
     
     envs.device = isIPhone ? envs.wording.ios : isAndroid ? envs.wording.android : envs.wording.ios;
+
+    if (envs.hidden !== "msHidden") {
+        if (navigator.bluetooth) {
+            envs.isChrome = true;
+        } else {
+            envs.isSafari = true;
+        }
+    }
 }
 
 function setEnv() {
@@ -48,7 +58,7 @@ function setEnv() {
     document.addEventListener(envs.visibilityChange, handleVisibilityChange, false);
 }
 
-export const initDeeplink = (options = {}) => {
+exports.initDeeplink = (options = {}) => {
     if (envs.isInit) {
         return;
     }
@@ -58,23 +68,45 @@ export const initDeeplink = (options = {}) => {
     settings.googlePlay = options.googlePlay || null;
     settings.timeout = options.timeout || null;
 
-    setEnv();
-    checkDeviceOs();
+    try {
+        setEnv();
+        checkDeviceOs();
+    } catch(e) {
+        console.log(e);
+    }
 };
 
-export const openDeeplink = (deeplink, needFallback = false, customTimeout, fallbackAction) => {
-    const timeout = customTimeout || settings.timeout || DEFAULT_TIMEOUT;
+exports.openDeeplink = (deeplink, customTimeout, fallbackAction) => {
+    if (envs.isSafari) {
+        window.open(deeplink, 'deeplink');
+        return;
+    }
 
-    if (needFallback) {
+    if (fallbackAction && customTimeout) {
+        const timeout = customTimeout || settings.timeout || DEFAULT_TIMEOUT;
+
         clearTimeout(envs.timer);
+
         envs.timer = setTimeout(function() {
-            if (envs.device === envs.wording.ios && settings.appStore) {
-                wondow.location.href = settings.appStore;
-            } else if (envs.device === envs.wording.android && settings.googlePlay) {
-                wondow.location.href = settings.googlePlay;
-            } else {
-                fallbackAction && fallbackAction();
+            if (typeof fallbackAction === 'string') {
+                let fallbackUrl = fallbackAction;
+
+                if (!fallbackUrl) {
+                    if (envs.device === envs.wording.ios && settings.appStore) {
+                        fallbackUrl = settings.appStore;
+                    } else if (envs.device === envs.wording.android && settings.googlePlay) {
+                        fallbackUrl = settings.googlePlay;
+                    }
+                }
+
+                if (fallbackUrl) {
+                    window.location.href = fallbackUrl;
+                }
+
+                return;
             }
+            
+            fallbackAction && fallbackAction();
         }, timeout);
     }
 

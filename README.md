@@ -29,6 +29,5 @@ initDeeplink({
 openDeeplink(String deeplink, Boolean needFallback, Integer customTimeout, Function fallbackAction)
 ```
 * `deeplink` *(String)*: require, deeplink for app you want to open
-* `needFallback` *(Boolean)*: optional, a switch for do something when you don't install this app
 * `customTimeout` *(Integer)*: optional, timeout for waiting app open
-* `fallbackAction` *(Function)*: optional, do this function when appStore and googlePlay is not setting
+* `fallbackAction` *(Function || String)*: optional, go this when appStore and googlePlay is not setting
