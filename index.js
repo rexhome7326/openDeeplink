@@ -58,10 +58,12 @@ function setEnv() {
     document.addEventListener(envs.visibilityChange, handleVisibilityChange, false);
 }
 
-exports.initDeeplink = (options = {}) => {
+exports.initDeeplink = options => {
     if (envs.isInit) {
         return;
     }
+
+    options = options || {};
 
     envs.isInit = true;
     settings.appStore = options.appStore || null;
