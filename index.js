@@ -1,12 +1,12 @@
-const DEFAULT_TIMEOUT = 3000;
+var DEFAULT_TIMEOUT = 3000;
 
-const settings = {
+var settings = {
     appStore: null,
     googlePlay: null,
     timeout: DEFAULT_TIMEOUT
 };
 
-const envs = {
+var envs = {
     isInit: false,
     wording: {
         ios: 'IOS',
@@ -28,9 +28,9 @@ function handleVisibilityChange(e) {
 }
 
 function checkDeviceOs() {
-    const ua = navigator.userAgent.toLowerCase()
-    const isIPhone = envs.testRegex.test(ua)
-    const isAndroid = !!~ua.indexOf('android')
+    var ua = navigator.userAgent.toLowerCase()
+    var isIPhone = envs.testRegex.test(ua)
+    var isAndroid = !!~ua.indexOf('android')
     
     envs.device = isIPhone ? envs.wording.ios : isAndroid ? envs.wording.android : envs.wording.ios;
 
@@ -58,7 +58,7 @@ function setEnv() {
     document.addEventListener(envs.visibilityChange, handleVisibilityChange, false);
 }
 
-exports.initDeeplink = function(options) {
+exports.init = function(options) {
     if (envs.isInit) {
         return;
     }
@@ -78,20 +78,20 @@ exports.initDeeplink = function(options) {
     }
 };
 
-exports.openDeeplink = function(deeplink, customTimeout, fallbackAction) {
+exports.open = function(deeplink, customTimeout, fallbackAction) {
     if (envs.isSafari) {
         window.open(deeplink, 'deeplink');
         return;
     }
 
     if (fallbackAction && customTimeout) {
-        const timeout = customTimeout || settings.timeout || DEFAULT_TIMEOUT;
+        var timeout = customTimeout || settings.timeout || DEFAULT_TIMEOUT;
 
         clearTimeout(envs.timer);
 
         envs.timer = setTimeout(function() {
             if (typeof fallbackAction === 'string') {
-                let fallbackUrl = fallbackAction;
+                var fallbackUrl = fallbackAction;
 
                 if (!fallbackUrl) {
                     if (envs.device === envs.wording.ios && settings.appStore) {

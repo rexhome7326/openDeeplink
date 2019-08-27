@@ -1,4 +1,4 @@
-# openDeeplink
+# opendeeplink
 
 Open deeplink by visibilityChange
 
@@ -11,22 +11,22 @@ npm install opendeeplink --save
 # Usage
 ```js
 import {
-    initDeeplink,
-    openDeeplink
-} from 'openDeeplink';
+    init,
+    open
+} from 'opendeeplink';
 ```
 
-#### initDeeplink
+#### init
 ```js
-initDeeplink({
+init({
     appStore: 'path you want to go',
     googlePlay: 'path you want to go',
     timeout: 'timeout for waiting app open'
 });
 ```
-#### openDeeplink
+#### open
 ```js
-openDeeplink(String deeplink, Integer customTimeout, Function fallbackAction)
+open(String deeplink, Integer customTimeout, Function fallbackAction)
 ```
 * `deeplink` *(String)*: require, deeplink for app you want to open
 * `customTimeout` *(Integer)*: optional, timeout for waiting app open
